@@ -1,4 +1,4 @@
-const { barang } = require("../models");
+const { barang, sequelize } = require("../models");
 const Joi = require("joi");
 const { v4: uuid4 } = require("uuid");
 
@@ -12,8 +12,6 @@ const barangSchema = Joi.object({
   harga: Joi.number().integer().required(),
   diskon: Joi.number().integer().required(),
 });
-
-console.log(uuid4(), uuid4().length);
 
 exports.getAllBarang = async (req, res) => {
   try {
@@ -88,5 +86,40 @@ exports.createBarang = async (req, res) => {
         data: null,
       });
     }
-  } catch (error) {}
+
+    const [result] = await sequelize.query(
+      `
+      CALL sp_create_barang(:kode_barang, :nama_barang, :stock, :harga, :diskon, @message);`,
+      {
+        replacements: {
+          kode_barang: `BRG-${uuid4()}`,
+          nama_barang: req.body.nama_barang,
+          stock: req.body.stock,
+          harga: req.body.harga,
+          diskon: req.body.diskon,
+        },
+        type: sequelize.QueryTypes.RAW,
+      }
+    );
+
+    const [message] = await sequelize.query(
+      `
+      SELECT @message AS message;`,
+      {
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    return res.status(200).json({
+      status: 200,
+      message: message.message,
+      data: result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      message: "error form server",
+      data: null,
+    });
+  }
 };

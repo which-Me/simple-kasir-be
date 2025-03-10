@@ -1,5 +1,5 @@
 "use strict";
-const { Model } = require("sequelize");
+const { Model, Sequelize } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class penjualan extends Model {
     /**
@@ -20,10 +20,21 @@ module.exports = (sequelize, DataTypes) => {
       total_bayar: DataTypes.INTEGER,
       kembalian: DataTypes.INTEGER,
       tanggal_beli: DataTypes.STRING,
+      createdAt: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
+      },
+      updatedAt: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
+      },
     },
     {
       sequelize,
       modelName: "penjualan",
+      timestamps: true,
     }
   );
   return penjualan;

@@ -1,4 +1,5 @@
 "use strict";
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -32,11 +33,13 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.BIGINT,
+        defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.BIGINT,
+        defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
       },
     });
     await queryInterface.addConstraint("penjualans", {
