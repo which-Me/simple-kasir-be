@@ -4,14 +4,16 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("penjualans", {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER.UNSIGNED,
-      },
+      // id: {
+      //   allowNull: false,
+      //   autoIncrement: true,
+      //   primaryKey: true,
+      //   type: Sequelize.INTEGER.UNSIGNED,
+      // },
       id_penjualan: {
         type: Sequelize.STRING(50),
+        primaryKey: true,
+        allowNull: false,
       },
       kode_barang: {
         type: Sequelize.STRING(50),
@@ -29,7 +31,9 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       tanggal_beli: {
-        type: Sequelize.INTEGER.UNSIGNED,
+        type: Sequelize.BIGINT,
+        allowNull: false,
+        defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
       },
       createdAt: {
         allowNull: false,
@@ -40,6 +44,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.BIGINT,
         defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
+        onUpdate: Sequelize.literal("UNIX_TIMESTAMP()"),
       },
     });
     await queryInterface.addConstraint("penjualans", {

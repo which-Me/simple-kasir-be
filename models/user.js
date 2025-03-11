@@ -13,19 +13,24 @@ module.exports = (sequelize, DataTypes) => {
   }
   user.init(
     {
-      account_uuid: DataTypes.STRING,
+      account_uuid: {
+        type: DataTypes.STRING(50),
+        primaryKey: true,
+        allowNull: false,
+      },
       name: DataTypes.STRING,
       email: DataTypes.STRING,
       password: DataTypes.STRING,
       createdAt: {
-        type: DataTypes.BIGINT,
         allowNull: false,
+        type: Sequelize.BIGINT,
         defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
       },
       updatedAt: {
-        type: DataTypes.BIGINT,
         allowNull: false,
+        type: Sequelize.BIGINT,
         defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
+        onUpdate: Sequelize.literal("UNIX_TIMESTAMP()"),
       },
     },
     {

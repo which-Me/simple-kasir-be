@@ -4,15 +4,15 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("barangs", {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER.UNSIGNED,
-      },
+      // id: {
+      //   allowNull: false,
+      //   autoIncrement: true,
+      //   primaryKey: true,
+      //   type: Sequelize.INTEGER.UNSIGNED,
+      // },
       kode_barang: {
         type: Sequelize.STRING(50),
-        unique: true,
+        primaryKey: true,
         allowNull: false,
       },
       nama_barang: {
@@ -36,6 +36,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.BIGINT,
         defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
+        onUpdate: Sequelize.literal("UNIX_TIMESTAMP()"),
       },
     });
   },

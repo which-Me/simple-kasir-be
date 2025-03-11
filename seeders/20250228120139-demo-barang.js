@@ -31,15 +31,15 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     const items = [];
 
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 20; i++) {
       items.push({
         kode_barang: `BRG-${faker.string.alphanumeric(5).toUpperCase()}`,
         nama_barang: faker.commerce.productName(),
         stock: faker.number.int({ min: 10, max: 100 }),
         harga: faker.number.int({ min: 50000, max: 500000 }),
         diskon: faker.number.int({ min: 0, max: 50 }),
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
       });
     }
 

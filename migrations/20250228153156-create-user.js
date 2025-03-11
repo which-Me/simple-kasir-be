@@ -4,14 +4,15 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("users", {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER.UNSIGNED,
-      },
+      // id: {
+      //   allowNull: false,
+      //   autoIncrement: true,
+      //   primaryKey: true,
+      //   type: Sequelize.INTEGER.UNSIGNED,
+      // },
       account_uuid: {
         allowNull: false,
+        primaryKey: true,
         type: Sequelize.STRING(50),
       },
       name: {
@@ -36,6 +37,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.BIGINT,
         defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
+        onUpdate: Sequelize.literal("UNIX_TIMESTAMP()"),
       },
     });
   },

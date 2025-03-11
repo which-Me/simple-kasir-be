@@ -68,9 +68,10 @@ exports.regist = async (req, res) => {
       message: "account created",
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       status: 500,
-      error: error.message,
+      message: "error form server",
+      data: null,
     });
   }
 };
@@ -122,7 +123,9 @@ exports.login = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      error: error.message,
+      status: 500,
+      message: "error form server",
+      data: null,
     });
   }
 };

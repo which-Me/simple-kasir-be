@@ -3,7 +3,7 @@ const Joi = require("joi");
 const { v4: uuid4 } = require("uuid");
 
 const idSchema = Joi.object({
-  id: Joi.number().integer().positive().required(),
+  kode_barang: Joi.string().required(),
 });
 
 const barangSchema = Joi.object({
@@ -15,7 +15,7 @@ const barangSchema = Joi.object({
 
 exports.getAllBarang = async (req, res) => {
   try {
-    const barangs = await barang.findAll({ order: [["id", "DESC"]] });
+    const barangs = await barang.findAll({ order: [["createdAt", "DESC"]] });
 
     if (barangs.length === 0) {
       return res.status(404).json({
@@ -51,7 +51,7 @@ exports.getBarang = async (req, res) => {
     }
 
     const barangs = await barang.findOne({
-      where: { id: req.body.id },
+      where: { kode_barang: req.body.kode_barang },
     });
 
     if (!barangs) {

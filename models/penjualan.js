@@ -13,22 +13,34 @@ module.exports = (sequelize, DataTypes) => {
   }
   penjualan.init(
     {
-      id_penjualan: DataTypes.STRING,
-      kode_barang: DataTypes.STRING,
+      id_penjualan: {
+        type: DataTypes.STRING(50),
+        primaryKey: true,
+        allowNull: false,
+      },
+      kode_barang: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+      },
       jumlah: DataTypes.INTEGER,
       total: DataTypes.INTEGER,
       total_bayar: DataTypes.INTEGER,
       kembalian: DataTypes.INTEGER,
-      tanggal_beli: DataTypes.STRING,
-      createdAt: {
-        type: DataTypes.BIGINT,
+      tanggal_beli: {
+        type: Sequelize.BIGINT,
         allowNull: false,
         defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
       },
-      updatedAt: {
-        type: DataTypes.BIGINT,
+      createdAt: {
         allowNull: false,
+        type: Sequelize.BIGINT,
         defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.BIGINT,
+        defaultValue: Sequelize.literal("UNIX_TIMESTAMP()"),
+        onUpdate: Sequelize.literal("UNIX_TIMESTAMP()"),
       },
     },
     {
