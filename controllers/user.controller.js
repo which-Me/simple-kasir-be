@@ -7,7 +7,9 @@ require("dotenv").config();
 
 const registSchema = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().required(),
+  email: Joi.string()
+    .email({ tlds: { allow: ["com", "net", "org"] } })
+    .required(),
   password: Joi.string().min(8).required(),
 });
 
@@ -22,8 +24,6 @@ exports.regist = async (req, res) => {
 
     const { error } = registSchema.validate(req.body);
     if (error) {
-      console.log(error);
-
       return res.status(400).json({
         status: 400,
         message: error.message,
@@ -82,8 +82,6 @@ exports.login = async (req, res) => {
 
     const { error } = loginSchema.validate(req.body);
     if (error) {
-      console.log(error);
-
       return res.status(400).json({
         status: 400,
         message: error.message,

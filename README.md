@@ -22,18 +22,25 @@ localhost:3000/api/user/login POST
 
 localhost:3000/api/barang/ POST
 
-localhost:3000/api/barang/getDataById POST
+localhost:3000/api/barang/byId POST
  body: {
  "kode_barang": ""
  }
 
-localhost:3000/api/barang/createBarang POST
+localhost:3000/api/barang/create POST
  body: {
  "nama_barang": "",
  "stock": "",
  "harga": "",
  "diskon": ""
  }
+
+ localhost:3000/api/barang/order/create POST
+ body:{
+    "kode_barang": "",
+    "jumlah_barang": ,
+    "jumlah_bayar":
+}
 ```
 
 ---
@@ -57,3 +64,9 @@ mar 11, 11.37
 > - Updated seeders.
 >
 > > If I find any new bugs, I will fix them soon.
+
+mar 11, 22:29
+
+> - Added create order conttroler
+> - Changes Endpoint Route
+> - Fixs stored procedure order

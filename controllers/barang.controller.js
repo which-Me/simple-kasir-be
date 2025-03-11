@@ -43,8 +43,8 @@ exports.getBarang = async (req, res) => {
   try {
     const { error } = idSchema.validate(req.body);
     if (error) {
-      return res.status(401).json({
-        status: 401,
+      return res.status(400).json({
+        status: 400,
         message: error.message,
         data: null,
       });

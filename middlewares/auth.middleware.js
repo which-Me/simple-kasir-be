@@ -8,7 +8,6 @@ exports.authMiddleware = (req, res, next) => {
 
   try {
     jwt.verify(token, process.env.jwt_key);
-    console.log(req.user);
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {

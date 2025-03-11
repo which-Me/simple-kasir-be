@@ -7,8 +7,8 @@ const router = express.Router();
 // GET semua barang
 router.post("/", authMiddleware, barangController.getAllBarang);
 
-router.post("/getDataById", authMiddleware, barangController.getBarang);
+router.post("/byId", authMiddleware, barangController.getBarang);
 
-router.post("/createBarang", authMiddleware, barangController.createBarang);
+router.post("/create", authMiddleware, barangController.createBarang);
 
 module.exports = router;

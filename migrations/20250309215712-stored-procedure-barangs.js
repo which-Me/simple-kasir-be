@@ -30,6 +30,8 @@ module.exports = {
     OUT p_harga_satuan INT UNSIGNED,
     OUT p_total_harga INT UNSIGNED,
     OUT p_sisa_kembalian INT UNSIGNED,
+    OUT p_jumlah_order INT UNSIGNED,
+    OUT p_tanggal_beli BIGINT UNSIGNED,
     OUT p_message VARCHAR(255)
     )
 
@@ -80,11 +82,16 @@ module.exports = {
           SET v_uuid = UUID();
           SET v_id_penjualan = CONCAT('ORDER-', REPLACE(v_uuid, '-', ''));
 
+          -- Generate EPOCH 
+          SET p_tanggal_beli = UNIX_TIMESTAMP();
+
+          SET p_jumlah_order = p_jumlah;
+
           UPDATE barangs SET stock = stock - p_jumlah WHERE kode_barang = p_kode_barang;
 
           -- insert table order
           INSERT INTO penjualans (id_penjualan, kode_barang, jumlah, total, total_bayar, kembalian, tanggal_beli) 
-          VALUES (v_id_penjualan, p_kode_barang, p_jumlah, p_total_harga, p_jumlah_bayar, p_sisa_kembalian, UNIX_TIMESTAMP());
+          VALUES (v_id_penjualan, p_kode_barang, p_jumlah, p_total_harga, p_jumlah_bayar, p_sisa_kembalian, p_tanggal_beli);
           END IF;
       END IF;
   END IF;

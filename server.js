@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 // routes
 const barangRoutes = require("./routes/barang.routes");
 const userRoutes = require("./routes/user.routes");
+const orderRoutes = require("./routes/order.routes");
 
 // config
 dotenv.config();
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/barang", barangRoutes);
+app.use("/api/barang", orderRoutes);
 app.use("/api/user", userRoutes);
 
 app.listen(PORT, () => console.log(`Server run on port ${PORT}`));
