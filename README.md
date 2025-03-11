@@ -44,15 +44,16 @@ localhost:3000/api/barang/createBarang POST
 
 mar 10, 07:30
 
-> updating controllers, models, and migrations
+> Updating controllers, models, and migrations
 
 mar 11, 11.37
 
-> some update & fix
-> details
-> -> add orders controller (but doesnt work yet, cause empty)
-> -> add order procedure
-> -> update timestamp, primary and other on models, and migrations
-> -> update user & barang controllers
-> -> update seeders
-> (if i found new bug, i will fix soon.)
+> Some updates and fixes:
+>
+> - Added orders controller (currently not functional, as it's empty).
+> - Added order procedure.
+> - Updated timestamps, primary keys, and other fields in models and migrations.
+> - Updated user and barang controllers.
+> - Updated seeders.
+>
+> > If I find any new bugs, I will fix them soon.
