@@ -35,11 +35,16 @@ localhost:3000/api/barang/create POST
  "diskon": ""
  }
 
- localhost:3000/api/barang/order/create POST
+localhost:3000/api/barang/order/create POST
  body:{
-    "kode_barang": "",
-    "jumlah_barang": ,
-    "jumlah_bayar":
+ "kode_barang": "",
+ "jumlah_barang": ,
+ "jumlah_bayar":
+}
+
+localhost:3000/api/barang/order/delete POST
+ body:{
+ "id_penjualan": ""
 }
 ```
 
@@ -70,3 +75,8 @@ mar 11, 22:29
 > - Added create order conttroler
 > - Changes Endpoint Route
 > - Fixs stored procedure order
+
+mar 15, 11:33
+
+> - Added delete order controller
+> - Add delete order stored procedure
