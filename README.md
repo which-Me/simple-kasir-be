@@ -11,7 +11,8 @@ localhost:3000/api/user/regist POST
  body: {
  "name": "",
  "email": "",
- "password": ""
+ "password": "",
+ "confirm_password": ""
  }
 
 localhost:3000/api/user/login POST
