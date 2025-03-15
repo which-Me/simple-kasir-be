@@ -57,7 +57,7 @@ exports.regist = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 5);
 
     await user.create({
-      account_uuid: uuidv4(),
+      account_uuid: `USR-${uuidv4()}`,
       name: name,
       email: email,
       password: hashedPassword,

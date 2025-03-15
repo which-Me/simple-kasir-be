@@ -26,14 +26,14 @@
 
 "use strict";
 const { faker } = require("@faker-js/faker");
-
+const { v4: uuid4 } = require("uuid");
 module.exports = {
   async up(queryInterface, Sequelize) {
     const items = [];
 
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 10; i++) {
       items.push({
-        kode_barang: `BRG-${faker.string.alphanumeric(5).toUpperCase()}`,
+        kode_barang: `BRG-${uuid4()}`,
         nama_barang: faker.commerce.productName(),
         stock: faker.number.int({ min: 10, max: 100 }),
         harga: faker.number.int({ min: 50000, max: 500000 }),
