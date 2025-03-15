@@ -11,6 +11,13 @@ const registSchema = Joi.object({
     .email({ tlds: { allow: ["com", "net", "org"] } })
     .required(),
   password: Joi.string().min(8).required(),
+  confirm_password: Joi.string()
+    .min(8)
+    .valid(Joi.ref("password"))
+    .required()
+    .messages({
+      "any.only": "passwords doesnt match",
+    }),
 });
 
 const loginSchema = Joi.object({
