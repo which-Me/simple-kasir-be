@@ -11,4 +11,10 @@ router.post("/byId", authMiddleware, barangController.getBarang);
 
 router.post("/create", authMiddleware, barangController.createBarang);
 
+router.post("/update", authMiddleware, barangController.updateBarang);
+
+router.post("/delete", authMiddleware, barangController.deleteBarang);
+
+router.post("/addStock", authMiddleware, barangController.addStock);
+
 module.exports = router;

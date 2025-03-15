@@ -64,6 +64,33 @@ exports.createOrder = async (req, res) => {
       tanggal_beli,
     } = message;
 
+    if (message.message === "barang tidak ditemukan") {
+      return res.status(404).json({
+        status: 404,
+        message: message.message,
+        data: null,
+      });
+    }
+
+    if (message.message !== "order berhasil") {
+      return res.status(400).json({
+        status: 400,
+        message: message.message,
+        data: {
+          id_penjualan: id_penjualan,
+          kode_barang: req.body.kode_barang,
+          nama_barang: nama_barang,
+          harga_satuan: harga_satuan,
+          jumlah_order: jumlah_order,
+          total_harga: total_harga,
+          diskon: diskon,
+          jumlah_bayar: req.body.jumlah_bayar,
+          sisa_kembalian: sisa_kembalian,
+          tanggal_beli: tanggal_beli,
+        },
+      });
+    }
+
     return res.status(200).json({
       status: 200,
       message: message.message,

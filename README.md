@@ -36,6 +36,26 @@ localhost:3000/api/barang/create POST
  "diskon": ""
  }
 
+localhost:3000/api/barang/update POST
+ body:{
+ "kode_barang": "",
+ "nama_barang": "",
+ "stock": "",
+ "harga": "",
+ "diskon": ""
+ }
+
+localhost:3000/api/barang/delete POST
+ body:{
+ "kode_barang": ""
+}
+
+localhost:3000/api/barang/addStock POST
+ body:{
+ "kode_barang": "",
+ "stock":
+}
+
 localhost:3000/api/barang/order/create POST
  body:{
  "kode_barang": "",
@@ -47,6 +67,7 @@ localhost:3000/api/barang/order/delete POST
  body:{
  "id_penjualan": ""
 }
+
 ```
 
 ---
@@ -81,3 +102,8 @@ mar 15, 11:33
 
 > - Added delete order controller
 > - Add delete order stored procedure
+
+mar 15, 14:52
+
+> - Added update & add stock controller
+> - fixs response

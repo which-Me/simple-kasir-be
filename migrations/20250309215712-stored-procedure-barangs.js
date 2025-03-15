@@ -149,6 +149,29 @@ END;
       END IF;
       END;
       `);
+    await queryInterface.sequelize.query(`
+        CREATE PROCEDURE sp_add_stock(
+        IN p_kode_barang VARCHAR(50),
+        IN p_stock INT UNSIGNED,
+        OUT p_message VARCHAR(255)
+        )
+    
+        BEGIN
+          DECLARE v_stock INT;
+          DECLARE v_exists INT;
+
+          SELECT COUNT(*) INTO v_exists FROM barangs WHERE kode_barang = p_kode_barang;
+
+          IF v_exists = 0 THEN
+            SET p_message = 'data not found';
+          ELSE
+            SELECT stock INTO v_stock FROM barangs WHERE kode_barang = p_kode_barang;
+
+            UPDATE barangs SET stock = v_stock + p_stock WHERE kode_barang = p_kode_barang;
+            SET p_message = CONCAT('stock updated ', '+', p_stock);
+          END IF;
+        END;
+        `);
   },
 
   async down(queryInterface, Sequelize) {
@@ -161,5 +184,8 @@ END;
     await queryInterface.sequelize.query(`
       DROP PROCEDURE IF EXISTS sp_order_cancel;
       `);
+    await queryInterface.sequelize.query(`
+      DROP PROCEDURE IF EXISTS sp_add_stock;
+        `);
   },
 };
