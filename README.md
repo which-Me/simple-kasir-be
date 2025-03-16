@@ -4,6 +4,9 @@
 
 ### (DONE)
 
+before running it, make sure the database is properly configured in the config/ folder,
+To run it, you can execute 'npm start' in your terminal.
+
 #### Route List
 
 ```sh
