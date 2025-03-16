@@ -1,4 +1,4 @@
-const { barang, sequelize } = require("../models");
+const { penjualan, sequelize } = require("../models");
 const Joi = require("joi");
 
 const orderSchema = Joi.object({
@@ -7,8 +7,14 @@ const orderSchema = Joi.object({
   jumlah_bayar: Joi.number().integer().positive().required(),
 });
 
-const orderCancel = Joi.object({
+const idSchema = Joi.object({
   id_penjualan: Joi.string().max(50).required(),
+});
+
+const updateSchema = Joi.object({
+  id_penjualan: Joi.string().max(50).required(),
+  jumlah_barang: Joi.number().integer().positive().required(),
+  jumlah_bayar: Joi.number().integer().positive().required(),
 });
 
 exports.createOrder = async (req, res) => {
@@ -118,7 +124,7 @@ exports.createOrder = async (req, res) => {
 
 exports.cancelOrder = async (req, res) => {
   try {
-    const { error } = orderCancel.validate(req.body);
+    const { error } = idSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
         status: 400,
@@ -164,6 +170,128 @@ exports.cancelOrder = async (req, res) => {
   } catch (error) {
     console.error(error);
 
+    return res.status(500).json({
+      status: 500,
+      message: "error form server",
+      data: null,
+    });
+  }
+};
+
+exports.getAllOrder = async (req, res) => {
+  try {
+    const penjualans = await penjualan.findAll({
+      order: [["createdAt", "DESC"]],
+    });
+
+    if (penjualans.length === 0) {
+      return res.status(404).json({
+        status: 404,
+        message: "data is empty",
+        data: null,
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: "get data succesfully",
+      data: penjualans,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      message: "error form server",
+      data: null,
+    });
+  }
+};
+
+exports.getOrder = async (req, res) => {
+  try {
+    const { error } = idSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        status: 400,
+        message: error.message,
+        data: null,
+      });
+    }
+
+    const penjualans = await penjualan.findOne({
+      where: { id_penjualan: req.body.id_penjualan },
+    });
+
+    if (!penjualans) {
+      return res.status(404).json({
+        status: 404,
+        message: "data not found",
+        data: null,
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: "get data succesfully",
+      data: penjualans,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      message: "error form server",
+      data: null,
+    });
+  }
+};
+
+exports.updateOrder = async (req, res) => {
+  try {
+    const { id_penjualan, jumlah_barang, jumlah_bayar } = req.body;
+    const { error } = updateSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        status: 400,
+        message: error.message,
+        data: null,
+      });
+    }
+
+    const result = await sequelize.query(
+      `
+      CALL sp_order_update(:id_penjualan, :jumlah_barang, :jumlah_bayar, @message);
+    `,
+      {
+        replacements: {
+          id_penjualan: id_penjualan,
+          jumlah_barang: jumlah_barang,
+          jumlah_bayar: jumlah_bayar,
+        },
+        type: sequelize.QueryTypes.RAW,
+      }
+    );
+
+    const [message] = await sequelize.query(
+      `
+      SELECT @message AS message;
+      `,
+      {
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    if (!result) {
+      return res.status(400).json({
+        status: 400,
+        message: message.message,
+        data: null,
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: message.message,
+      data: result[0],
+    });
+  } catch (error) {
     return res.status(500).json({
       status: 500,
       message: "error form server",

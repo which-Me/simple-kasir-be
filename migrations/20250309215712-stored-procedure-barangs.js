@@ -77,7 +77,7 @@ module.exports = {
         SET p_total_harga = (v_harga_satuan * p_jumlah);
 
         IF p_total_harga > p_jumlah_bayar THEN
-          SET p_message = 'pembayaran tidak cukup';
+          SET p_message = 'pembayaran tidak mencukupi';
           SET p_sisa_kembalian = NULL;
         ELSE
           -- calculate kembalian
@@ -172,6 +172,73 @@ END;
           END IF;
         END;
         `);
+    await queryInterface.sequelize.query(`
+        CREATE PROCEDURE sp_order_update(
+        IN p_id_penjualan VARCHAR(50),
+        IN p_jumlah INT UNSIGNED,
+        IN p_jumlah_bayar INT UNSIGNED,
+        OUT p_message VARCHAR(255)
+        )
+        BEGIN
+          DECLARE v_exists INT UNSIGNED;
+          DECLARE v_kode_barang VARCHAR(50);
+          DECLARE v_current_jumlah INT UNSIGNED;
+          DECLARE v_stock INT UNSIGNED;
+          DECLARE v_harga INT UNSIGNED;
+          DECLARE v_diskon INT UNSIGNED;
+          DECLARE v_harga_satuan INT UNSIGNED;
+          DECLARE v_total_harga INT UNSIGNED;
+          DECLARE v_sisa_kembalian INT UNSIGNED;
+          DECLARE v_diskon_amount INT UNSIGNED;
+
+
+        -- check is exists
+        SELECT COUNT(*) INTO v_exists FROM penjualans WHERE id_penjualan = p_id_penjualan;
+
+        IF v_exists = 0 THEN
+          SET p_message = 'order not found';
+        ELSE
+        -- get current order detail
+
+          SELECT p.kode_barang, p.jumlah, b.stock, b.harga, b.diskon INTO v_kode_barang, v_current_jumlah, v_stock, v_harga, v_diskon 
+          FROM penjualans p JOIN barangs b ON p.kode_barang = b.kode_barang
+          WHERE id_penjualan = p_id_penjualan;
+
+          -- check if stock enough
+          IF v_stock + v_current_jumlah < p_jumlah THEN
+            SET p_message = 'stock tidak mencukupi';
+          ELSE
+            -- calcuate discount
+            SET v_diskon_amount = (v_harga * v_diskon) / 100;
+            SET v_harga_satuan = v_harga - v_diskon_amount;
+            SET v_total_harga = (v_harga_satuan * p_jumlah);
+
+            -- check if payment enough
+            IF v_total_harga > p_jumlah_bayar THEN
+              SET p_message = 'pembayaran tidak mencukupi';
+            ELSE
+              -- calculate kembalian
+              SET v_sisa_kembalian = p_jumlah_bayar - v_total_harga;
+
+              -- update order
+              UPDATE penjualans 
+              SET jumlah = p_jumlah, total = v_total_harga, total_bayar = p_jumlah_bayar, kembalian = v_sisa_kembalian
+              WHERE id_penjualan = p_id_penjualan;
+
+              -- update barang (stock)
+              UPDATE barangs
+              SET stock = v_stock + v_current_jumlah - p_jumlah
+              WHERE kode_barang = v_kode_barang;
+
+              SELECT * FROM penjualans WHERE id_penjualan = p_id_penjualan;
+
+              SET p_message = 'update order berhasil';
+            END IF;
+          END IF;
+        END IF;
+      END;
+            
+        `);
   },
 
   async down(queryInterface, Sequelize) {
@@ -186,6 +253,9 @@ END;
       `);
     await queryInterface.sequelize.query(`
       DROP PROCEDURE IF EXISTS sp_add_stock;
-        `);
+      `);
+    await queryInterface.sequelize.query(`
+      DROP PROCEDURE IF EXISTS sp_order_update;
+      `);
   },
 };

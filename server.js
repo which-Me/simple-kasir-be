@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const limit = require("express-rate-limit");
 
 // routes
 const barangRoutes = require("./routes/barang.routes");
@@ -16,6 +17,13 @@ const app = express();
 // middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(
+  limit.rateLimit({
+    windowMs: 30 * 1000,
+    max: 5,
+    message: "Too many request, Try again after 30 sec",
+  })
+);
 
 // route
 app.get("/", (req, res) => {
