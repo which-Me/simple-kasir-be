@@ -2,7 +2,7 @@
 ## _SIMPLE KASIR BACKEND_
 ---
 
-> note: this project is on proccess
+### (DONE)
 
 #### Route List
 
@@ -68,6 +68,19 @@ localhost:3000/api/barang/order/delete POST
  "id_penjualan": ""
 }
 
+localhost:3000/api/barang/order/update POST
+ body:{
+ "id_penjualan": "",
+ "jumlah_barang":,
+ "jumlah_bayar":
+}
+
+localhost:3000/api/barang/order/byId POST
+ body:{
+ "id_penjualan": ""
+ }
+
+localhost:3000/api/barang/order/ POST
 ```
 
 ---
@@ -107,3 +120,8 @@ mar 15, 14:52
 
 > - Added update & add stock controller
 > - fixs response
+
+mar 17, 00:47
+
+> - Added rate limiting
+> - Added (byId, getAll, update) order controller
